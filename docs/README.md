@@ -26,7 +26,7 @@ For Detailed instructions please see our <a href="https://github.com/fostiropoul
 ## Intuition
 
 <p style="text-align:center">
-<img src="../assets/stream.png" alt="drawing" width="60%"/>
+<img src="stream.png" alt="drawing" width="60%"/>
 </p>
 
 Illustration of our Stream benchmark and a threshold-based approach in identifying novelty. **Left**: our meta-learning process uses a `dummy` learner that does not attempt to mitigate
