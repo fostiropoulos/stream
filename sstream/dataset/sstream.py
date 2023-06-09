@@ -1,5 +1,8 @@
+import argparse
 from pathlib import Path
 
+import torch
+import sys
 from stream.datasets import Amazon, DomainNetReal, DomainNetSketch, Imdb
 from stream.main import Stream
 from tqdm import tqdm
@@ -81,8 +84,6 @@ def download_dataset(
     from multiprocessing import Process
 
     for ds in dataset_names:
-        # dataset = ds(root_path=root_path, make=True)
-        # dataset = ds(root_path=root_path, action="download")
         p = Process(target=_download_ds, args=(ds, root_path))
         p.start()
         ps.append(p)
@@ -93,10 +94,12 @@ def download_dataset(
 def extract_feats(
     root_path=Path.home().joinpath("stream_ds"),
     dataset_names=[Amazon, DomainNetReal, DomainNetSketch, Imdb],
+    device: str = "cuda",
+    batch_size: int = 64,
 ):
     for ds in dataset_names:
         dataset = ds(root_path=root_path)
-        dataset.make_features(64, "cuda", feats_name=ds.default_feat_extractor)
+        dataset.make_features(batch_size, device, feats_name=ds.default_feat_extractor)
         for train in [True, False]:
             dataset = ds(
                 root_path=root_path,
@@ -107,29 +110,29 @@ def extract_feats(
                 pass
 
 
-def export_feats(
-    root_path=Path.home().joinpath("stream_ds"),
-    dataset_names=["amazon", "domainnetreal", "domainnetsketch", "imdb"],
-    export_path=Path.home().joinpath("surprise_feats"),
-):
-    for train in [True, False]:
-        for task_id in range(len(dataset_names)):
-            dataset = Stream(
-                root_path,
-                datasets=dataset_names,
-                task_id=task_id,
-                feats_name="default",
-                train=[train],
-            )
-            for t in tqdm(dataset):
-                pass
-    dataset.export_feats(export_path, export_all=False, clean_make=True)
-
-
 if __name__ == "__main__":
+    args = argparse.ArgumentParser(description="Download and process SStream Dataset")
+    args.add_argument(
+        "--action",
+        required=True,
+        choices=["download", "make"],
+    )
+    args.add_argument("--dataset_path", required=True, type=Path)
+    if "--action make" in sys.argv:
+        args.add_argument(
+            "--device",
+            required=True,
+            choices=["cuda", "cpu"]
+            + [f"cuda:{i}" for i in range(torch.cuda.device_count())],
+        )
+        args.add_argument("--batch_size", required=True, type=int)
+    pargs = args.parse_args()
+
     # 1.
-    # download_dataset()
+    if pargs.action == "download":
+        download_dataset(pargs.dataset_path)
     # 2.
-    extract_feats()
-    # 3.
-    export_feats()
+    elif pargs.action == "make":
+        extract_feats(
+            pargs.dataset_path, device=pargs.device, batch_size=pargs.batch_size
+        )

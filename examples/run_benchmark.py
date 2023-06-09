@@ -60,7 +60,7 @@ def train(backbone: Backbone, train_task: DataLoader):
 
 def run(
     dataset_name: ty.Literal[
-        "mnist", "pmnist", "mnistv", "cifar", "splitcifar", "smodal"
+        "snum", "pmnist", "snumv", "svis", "splitcifar", "smodal"
     ],
     dataset_path: Path,
 ):
@@ -92,7 +92,7 @@ if __name__ == "__main__":
     args.add_argument(
         "--dataset_name",
         required=True,
-        choices=["mnist", "pmnist", "mnistv", "cifar", "splitcifar", "smodal"],
+        choices=["snum", "pmnist", "snumv", "svis", "splitcifar", "smodal"],
     )
     args.add_argument("--dataset_path", required=True, type=Path)
 

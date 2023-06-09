@@ -46,7 +46,7 @@ class CImagenet(ImageFolder):
         )
 
 
-class SurpriseCIFAR(SurpriseDataset):
+class SurpriseVision(SurpriseDataset):
     DATA_SHAPE = [3, 32, 32]
     HEAD_SIZE = 10
     DS = [CIFAR10, CImagenet]
@@ -75,8 +75,8 @@ class SurpriseCIFAR(SurpriseDataset):
     def make_backbone_config():
         return dict(
             name="resnet18",
-            input_dim=SurpriseCIFAR.DATA_SHAPE,
-            output_dim=SurpriseCIFAR.HEAD_SIZE,
+            input_dim=SurpriseVision.DATA_SHAPE,
+            output_dim=SurpriseVision.HEAD_SIZE,
         )
 
 
@@ -124,8 +124,8 @@ class SplitCIFAR100(SurpriseDataset):
     def make_backbone_config():
         return dict(
             name="resnet18",
-            input_dim=SurpriseCIFAR.DATA_SHAPE,
-            output_dim=SurpriseCIFAR.HEAD_SIZE,
+            input_dim=SurpriseVision.DATA_SHAPE,
+            output_dim=SurpriseVision.HEAD_SIZE,
         )
 
     @classmethod

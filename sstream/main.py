@@ -5,8 +5,8 @@ from sstream.dataset.main import SurpriseDataset
 import numpy as np
 from torch.utils.data import DataLoader, Dataset
 
-from sstream.dataset.scifar import SplitCIFAR100, SurpriseCIFAR
-from sstream.dataset.smnist import PermutedMnist, SurpriseMNIST, SurpriseVectorMNIST
+from sstream.dataset.svis import SplitCIFAR100, SurpriseVision
+from sstream.dataset.snum import PermutedMnist, SurpriseNum, SurpriseVectorNum
 from sstream.dataset.sstream import SurpriseModal
 from sstream.dataset.utils import (
     get_random_seed,
@@ -17,17 +17,17 @@ import typing as ty
 
 
 def get_task_class(
-    name: ty.Literal["mnist", "pmnist", "mnistv", "cifar", "splitcifar", "smodal"]
+    name: ty.Literal["snum", "pmnist", "snumv", "svis", "splitcifar", "smodal"]
 ):
 
-    if name == "mnist":
-        return SurpriseMNIST
+    if name == "snum":
+        return SurpriseNum
     elif name == "pmnist":
         return PermutedMnist
-    elif name == "mnistv":
-        return SurpriseVectorMNIST
-    elif name == "cifar":
-        return SurpriseCIFAR
+    elif name == "snumv":
+        return SurpriseVectorNum
+    elif name == "svis":
+        return SurpriseVision
     elif name == "splitcifar":
         return SplitCIFAR100
     elif name == "smodal":
@@ -41,7 +41,7 @@ class TaskScheduler:
         self,
         dataset_root_path: Path,
         dataset: ty.Literal[
-            "mnist", "pmnist", "mnistv", "cifar", "splitcifar", "smodal"
+            "snum", "pmnist", "snumv", "svis", "splitcifar", "smodal"
         ],
         batch_size: int,
         stream_seed: int = 0,

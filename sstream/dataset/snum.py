@@ -4,7 +4,7 @@ from sstream.dataset import SurpriseDataset
 from sstream.dataset.transform.transforms import make_transform
 
 
-class SurpriseMNIST(SurpriseDataset):
+class SurpriseNum(SurpriseDataset):
     DATA_SHAPE = [32, 32, 1]
     HEAD_SIZE = 10
     DS = [MNIST, SVHN]
@@ -40,12 +40,12 @@ class SurpriseMNIST(SurpriseDataset):
     def make_backbone_config():
         return dict(
             name="resnet18",
-            input_dim=SurpriseMNIST.DATA_SHAPE,
-            output_dim=SurpriseMNIST.HEAD_SIZE,
+            input_dim=SurpriseNum.DATA_SHAPE,
+            output_dim=SurpriseNum.HEAD_SIZE,
         )
 
 
-class SurpriseVectorMNIST(SurpriseMNIST):
+class SurpriseVectorNum(SurpriseNum):
     DATA_SHAPE = [
         28 * 28,
     ]
@@ -63,10 +63,10 @@ class SurpriseVectorMNIST(SurpriseMNIST):
     def make_backbone_config():
         return dict(
             name="linear",
-            input_dim=SurpriseVectorMNIST.DATA_SHAPE,
-            output_dim=SurpriseVectorMNIST.HEAD_SIZE,
+            input_dim=SurpriseVectorNum.DATA_SHAPE,
+            output_dim=SurpriseVectorNum.HEAD_SIZE,
         )
 
 
-class PermutedMnist(SurpriseVectorMNIST):
+class PermutedMnist(SurpriseVectorNum):
     DS = [MNIST]
