@@ -3,7 +3,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="surprise_stream",
+    name="sstream",
     version="1.0",
     description="Stream GCL Benchmark",
     author="Iordanis Fostiropoulos",
@@ -14,7 +14,7 @@ setup(
     packages=find_packages(),
     zip_safe=False,
     install_requires=[
-        "stream @ https://github.com/wummel/patool/archive/refs/heads/master.zip",
+        # "stream @ https://github.com/fostiropoulos/stream.git",
     ],
     extras_require={
         "dev": [
@@ -25,6 +25,5 @@ setup(
             "black==23.3.0",
             "types-requests==2.28.11.17",
         ],
-        "dist": ["ray==2.3.1"],
     },
 )
