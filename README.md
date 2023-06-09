@@ -4,6 +4,9 @@ In  General Continual Learning (GCL), the goal is to learn a sequence of tasks t
 
 For example, one can use SVHN and MNIST (`snum`) to construct a sequence of tasks with different degree of `learning-gaps`.
 
+<p style="text-align:center">
+<img src="docs/stream_tasks.png" alt="drawing" width="100%"/>
+</p>
 ## Usage
 
 ### Overview
