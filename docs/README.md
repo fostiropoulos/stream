@@ -5,11 +5,7 @@
 <p style="text-align:center"> University of Southern California</p>
 
 <p style="text-align:center">
-<!-- <a href="">[arXiv]</a>
-&nbsp;&nbsp;&nbsp;
-<a href="https://github.com/fostiropoulos/stream">[Code]</a>
-&nbsp;&nbsp;&nbsp;
-<a href="https://github.com/fostiropoulos/stream">[Data]</a> -->
+
 </p>
 
 

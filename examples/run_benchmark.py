@@ -5,8 +5,8 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from sklearn.metrics import roc_auc_score
-from sstream import TaskScheduler
-from sstream.modules.backbone import Backbone, make_backbone
+from stream import TaskScheduler
+from stream.modules.backbone import Backbone, make_backbone
 from torch import optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm

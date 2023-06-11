@@ -3,12 +3,12 @@ from pathlib import Path
 
 import torch
 import sys
-from stream.datasets import Amazon, DomainNetReal, DomainNetSketch, Imdb
-from stream.main import Stream
+from autods.datasets import Amazon, DomainNetReal, DomainNetSketch, Imdb
+from autods.main import AutoDS
 from tqdm import tqdm
 
-from sstream.dataset import SurpriseDataset
-from sstream.dataset.transform.transforms import make_transform
+from stream.dataset import SurpriseDataset
+from stream.dataset.transform.transforms import make_transform
 
 
 class SurpriseModal(SurpriseDataset):
@@ -47,7 +47,7 @@ class SurpriseModal(SurpriseDataset):
         self.make_dataset()
 
     def make_dataset_class(self):
-        return Stream
+        return AutoDS
 
     @staticmethod
     def make_backbone_config():

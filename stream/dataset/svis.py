@@ -8,8 +8,8 @@ from torchvision.datasets import ImageFolder
 
 from torchvision.datasets import CIFAR10, CIFAR100
 
-from sstream.dataset import SurpriseDataset
-from sstream.dataset.transform.transforms import make_transform
+from stream.dataset import SurpriseDataset
+from stream.dataset.transform.transforms import make_transform
 
 
 def download_cinic10(root: Path, extract_dir: Path):

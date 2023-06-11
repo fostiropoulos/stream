@@ -1,7 +1,7 @@
 from torchvision.datasets import MNIST, SVHN
 
-from sstream.dataset import SurpriseDataset
-from sstream.dataset.transform.transforms import make_transform
+from stream.dataset import SurpriseDataset
+from stream.dataset.transform.transforms import make_transform
 
 
 class SurpriseNum(SurpriseDataset):

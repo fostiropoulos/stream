@@ -7,6 +7,7 @@ For example, one can use SVHN and MNIST (`snum`) to construct a sequence of task
 <p style="text-align:center">
 <img src="docs/stream_tasks.png" alt="drawing" width="100%"/>
 </p>
+
 ## Usage
 
 ### Overview
@@ -14,8 +15,8 @@ For example, one can use SVHN and MNIST (`snum`) to construct a sequence of task
 1. Install
    We recommend using a virtual enviroment with Python>3.10
    ```bash
-   git clone xxx
-   cd xxx
+   git clone https://github.com/fostiropoulos/stream.git
+   cd stream
    pip install  .
     ```
 2. [Download the pre-processed dataset](https://drive.google.com/file/d/1EYXOo4xEXSLwl2bim4BE9EiR4Km4HOkQ/view?usp=sharing)
@@ -39,11 +40,11 @@ surprise_feats
 
 2. You can run the dummy learner from the example by running the following command from the terminal
 ```
-cd xxx
 python examples/run_benchmark.py --dataset_name pmnist --dataset_path [save_directory]
 ```
 
 3. In the example a dummy learner is provided by default as the `backbone` the goal is to make the `dummy_learner` not forget. Forgeting is evaluated as the auc score on all tasks learned so far. You can adapt the example to evaluate an existing method or design your own.
+
 ```python
 # TODO make me (backbone) not forget
 dummy_learner: Backbone = make_backbone(**config)
@@ -58,7 +59,7 @@ dummy_learner: Backbone = make_backbone(**config)
 
 
 ```python
-from sstream import TaskScheduler
+from stream import TaskScheduler
 # You can set the dataset to be, ["snum", "pmnist", "snumv", "svis", "splitcifar", "smodal"]
 surprise_stream = TaskScheduler(
         dataset="snumv", dataset_root_path=dataset_path, batch_size=128
@@ -83,6 +84,9 @@ surprise_stream = TaskScheduler(
 ### CL Datasets
 
 1. Split-Cifar100
+
 [Description]
+
 2. Permuted Mnist
+
 [Description]

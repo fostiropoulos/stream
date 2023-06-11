@@ -2,7 +2,7 @@ import numpy as np
 import torch
 from torchvision.models import resnet18
 
-from sstream.dataset.utils import get_generator
+from stream.dataset.utils import get_generator
 
 
 class FixedPermutation:

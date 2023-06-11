@@ -1,11 +1,11 @@
 from typing import Callable, List
 from torchvision.transforms import transforms
 
-from sstream.dataset.transform.permutation import (
+from stream.dataset.transform.permutation import (
     FixedPermutation,
     FixedChannelPermutation,
 )
-from sstream.dataset.transform.rotation import (
+from stream.dataset.transform.rotation import (
     FixedVectorRotation,
     FixedChannelRotation,
 )

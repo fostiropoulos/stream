@@ -3,9 +3,9 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="sstream",
+    name="surprise-stream",
     version="1.0",
-    description="Stream GCL Benchmark",
+    description="Stream GCL Dataset",
     author="Iordanis Fostiropoulos",
     author_email="mail@iordanis.me",
     url="https://iordanis.me/",
@@ -14,7 +14,7 @@ setup(
     packages=find_packages(),
     zip_safe=False,
     install_requires=[
-        # "stream @ https://github.com/fostiropoulos/stream.git",
+        "autods==1.0",
     ],
     extras_require={
         "dev": [

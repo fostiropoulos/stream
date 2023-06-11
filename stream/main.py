@@ -1,14 +1,14 @@
 import itertools
 from pathlib import Path
 from typing import List, Tuple, Type
-from sstream.dataset.main import SurpriseDataset
+from stream.dataset.main import SurpriseDataset
 import numpy as np
 from torch.utils.data import DataLoader, Dataset
-
-from sstream.dataset.svis import SplitCIFAR100, SurpriseVision
-from sstream.dataset.snum import PermutedMnist, SurpriseNum, SurpriseVectorNum
-from sstream.dataset.sstream import SurpriseModal
-from sstream.dataset.utils import (
+import torch
+from stream.dataset.svis import SplitCIFAR100, SurpriseVision
+from stream.dataset.snum import PermutedMnist, SurpriseNum, SurpriseVectorNum
+from stream.dataset.smodal import SurpriseModal
+from stream.dataset.utils import (
     get_random_seed,
     make_dataloader,
 )
@@ -40,9 +40,7 @@ class TaskScheduler:
     def __init__(
         self,
         dataset_root_path: Path,
-        dataset: ty.Literal[
-            "snum", "pmnist", "snumv", "svis", "splitcifar", "smodal"
-        ],
+        dataset: ty.Literal["snum", "pmnist", "snumv", "svis", "splitcifar", "smodal"],
         batch_size: int,
         stream_seed: int = 0,
         num_rotations: int = 5,
@@ -81,6 +79,7 @@ class TaskScheduler:
 
     def _make_task_names(self, n_perm, n_rot, is_vector=False):
         rng = np.random.RandomState(seed=self.seed)
+        generator = torch.Generator().manual_seed(self.seed)
 
         rots = []
         if n_rot > 0:
@@ -92,7 +91,7 @@ class TaskScheduler:
             rots = rng.choice(limits, size=n_rot, replace=False).tolist()
         perms = []
         if n_perm > 0:
-            perms = [get_random_seed() for i in range(n_perm)]
+            perms = [get_random_seed(generator) for i in range(n_perm)]
 
         # generate tasks
         perm_postfix = [f"perm_{seed}" for seed in perms]
@@ -102,7 +101,7 @@ class TaskScheduler:
         assert len(post_fix) > 0
         task_names = list(itertools.product(*(self.ds_names, post_fix)))
         task_names = [f"{x}_{y}" for x, y in task_names]
-
+        rng.shuffle(task_names)
         return task_names
 
     def _create_tasks(self) -> List[str]:
