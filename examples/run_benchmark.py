@@ -34,6 +34,7 @@ def val(backbone: Backbone, val_tasks: list[DataLoader]):
                 targets,
                 predictions.softmax(-1),
                 multi_class="ovo",
+                labels=np.arange(predictions.shape[1]),
             )
         )
     backbone.train()
@@ -59,9 +60,7 @@ def train(backbone: Backbone, train_task: DataLoader):
 
 
 def run(
-    dataset_name: ty.Literal[
-        "snum", "pmnist", "snumv", "svis", "splitcifar", "smodal"
-    ],
+    dataset_name: ty.Literal["snum", "pmnist", "snumv", "svis", "splitcifar", "smodal"],
     dataset_path: Path,
 ):
     surprise_stream = TaskScheduler(
