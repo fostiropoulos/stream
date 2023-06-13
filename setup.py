@@ -3,7 +3,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="surprise-stream",
+    name="stream",
     version="1.0",
     description="Stream GCL Dataset",
     author="Iordanis Fostiropoulos",
@@ -14,7 +14,7 @@ setup(
     packages=find_packages(),
     zip_safe=False,
     install_requires=[
-        "autods==1.0",
+        "auto-dataset @ git+ssh://git@github.com/fostiropoulos/auto-dataset.git",
     ],
     extras_require={
         "dev": [

@@ -55,7 +55,7 @@ dummy_learner: Backbone = make_backbone(**config)
 3. There should be a restriction on the resources when a new task arrives. Since the setting is for an infinite stream of tasks, it is trivial to create a copy of the same model to avoid forgetting or store all data as they come in. However the method should be designed such that it does not require an infinite amount of resources.
 
 
-## Datasets
+# Datasets
 
 
 ```python
@@ -66,27 +66,34 @@ surprise_stream = TaskScheduler(
     )
 ```
 
-### GCL Datasets
+## Supported Task-Sequences
+
+### ResNetModel
+
+Datasets in this section have their features extracted from a the first layer of ConvLayer of a pretrained ResNet-18 where each sample is `64x16x16` (CxWxH) dimensions.
+
+They can be used with `stream.modules.backbone.ResNetModel`
+
+Datasets:
+
+1. S-Num (`snum`): A task-sequence constructed from [MNIST](https://pytorch.org/vision/main/generated/torchvision.datasets.MNIST.html) and [SVHN](https://pytorch.org/vision/main/generated/torchvision.datasets.SVHN.html#torchvision.datasets.SVHN) as `base datasets`, $D_\text{base}$, where the each class corresponds to a one-to-one mapping between the classes of the two dataset.
 
 
-1. SNum and SNum - Vector
+2. S-Vis (`svis`): A task-sequence constructed from [CIFAR10](https://pytorch.org/vision/main/generated/torchvision.datasets.CIFAR10.html#torchvision.datasets.CIFAR10) and [CINIC10](https://github.com/BayesWatch/cinic-10) (a mapping of ImageNet to CIFAR10 classes) as `base datasets`, $D_\text{base}$, where the each class corresponds to a one-to-one mapping between the classes of the two dataset.
 
-[Description]
+3. SplitCIFAR100 (`splitcifar`): A task-sequence constructed by splitting the classes of [CIFAR100](https://pytorch.org/vision/main/generated/torchvision.datasets.CIFAR100.html#torchvision.datasets.CIFAR100) $D_\text{base}$ to 10 tasks where there is no one-to-one mapping between the classes of each task.
 
-2. SVis
 
-[Description]
+### ResMLP
 
-3. SStream
+Samples in the task-sequences from this section are vectors where each sample is 768 dimensions.
 
-[Description]
+They can be used with `stream.modules.backbone.ResMLP`
 
-### CL Datasets
+1. S-Num - Vector (`snumv`): A vectorized version of `snum` task-sequence where SVHN is resized to 28x28, converted to grayscale and flatten to 768-D.
 
-1. Split-Cifar100
 
-[Description]
+2. S-Modal (`smodal`): A multi-modal task-sequence constructed using two Vision (Real, Sketch from [DomainNet](http://ai.bu.edu/M3SDA/)) and two Text ([IMDB](https://ai.stanford.edu/~amaas/data/sentiment/), [Amazon](https://huggingface.co/datasets/amazon_us_reviews)) datasets, $D_\text{base}$. S-Modal does not have a 1-to-1 mapping between the classes of the datasets. We map the 345 DomainNet classes into 10 concepts by performing clustering on the feature vectors from the textual descriptions of each class extracted using a [CLIP](https://huggingface.co/docs/transformers/model_doc/clip) model. It is an efficient method to evaluate a learning algorithm under `concept-learning`. The classes for the remaining datasets are unaffected. For the dataset we extract the feature vectors using a pre-trained [ViT](https://huggingface.co/docs/transformers/model_doc/vit) for Vision and [GPT-2](https://huggingface.co/gpt2) for Text and embed to a common 768-D feature space.
 
-2. Permuted Mnist
 
-[Description]
+3. Permuted Mnist (`pmnist`):  A task-sequence constructed by randomly permuting the images of MNIST as $D_\text{base}$ and providing a feature vector of 768-D.
