@@ -119,9 +119,17 @@ class FixedChannelRotation(FixedRotation):
     @torch.no_grad()
     def __call__(self, x: np.ndarray) -> np.ndarray:
         """
-        Applies the rotation.
-        :param x: image to be rotated
-        :return: rotated image
+        rotates an image in the feature space of a ResNet18.
+
+        Parameters
+        ----------
+        x : np.ndarray
+            image to be rotated
+
+        Returns
+        -------
+        np.ndarray
+            rotated image
         """
         x = x.unsqueeze(0)
         sample_feat = self.conv(x)

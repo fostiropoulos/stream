@@ -15,7 +15,7 @@ def get_random_seed(generator=None):
     return int(torch.empty((), dtype=torch.int32).random_(generator=generator).item())
 
 
-def make_dataloader(dataset, batch_size, split="train", sampler=None):
+def make_dataloader(dataset, batch_size, split="train", sampler=None) -> DataLoader:
     if sampler is not None:
         dataloader = DataLoader(
             dataset,
@@ -24,7 +24,7 @@ def make_dataloader(dataset, batch_size, split="train", sampler=None):
             drop_last=split == "train",
             num_workers=1,
             prefetch_factor=5,
-            persistent_workers=True
+            persistent_workers=True,
         )
     else:
         dataloader = DataLoader(
@@ -34,6 +34,6 @@ def make_dataloader(dataset, batch_size, split="train", sampler=None):
             drop_last=split == "train",
             num_workers=1,
             prefetch_factor=5,
-            persistent_workers=True
+            persistent_workers=True,
         )
     return dataloader

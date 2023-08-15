@@ -5,6 +5,10 @@ from stream.dataset.transform.transforms import make_transform
 
 
 class SurpriseNum(SurpriseDataset):
+    """
+    A multimodal Stream composed of Mnist and SVHN
+    """
+
     DATA_SHAPE = [32, 32, 1]
     HEAD_SIZE = 10
     DS = [MNIST, SVHN]
@@ -31,7 +35,7 @@ class SurpriseNum(SurpriseDataset):
         return make_transform(
             self.transform_name,
             self.ds_name,
-            self.val,
+            self.seed,
             split=self.split,
             is_vector=False,
         )
@@ -46,6 +50,11 @@ class SurpriseNum(SurpriseDataset):
 
 
 class SurpriseVectorNum(SurpriseNum):
+    """
+    A multimodal Stream composed of the vector
+    representation of Mnist and SVHN
+    """
+
     DATA_SHAPE = [
         28 * 28,
     ]
@@ -54,7 +63,7 @@ class SurpriseVectorNum(SurpriseNum):
         return make_transform(
             self.transform_name,
             self.ds_name,
-            self.val,
+            self.seed,
             split=self.split,
             is_vector=True,
         )

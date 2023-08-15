@@ -15,6 +15,11 @@ import typing as ty
 
 @torch.no_grad()
 def val(backbone: Backbone, val_tasks: list[DataLoader]):
+    """
+    This is the validation step of the Stream Benchmark.
+    We use ROC_AUC_SCORE to evaluate the performance of the
+    backbone.
+    """
     backbone.eval()
     evals: list[float] = []
     for val_task in val_tasks:
@@ -42,6 +47,9 @@ def val(backbone: Backbone, val_tasks: list[DataLoader]):
 
 
 def train(backbone: Backbone, train_task: DataLoader):
+    """
+    This is the train step of the Stream benchmark.
+    """
     optimizer = optim.SGD(backbone.parameters(), lr=0.01, momentum=0.9)
     backbone.train()
 
@@ -63,6 +71,9 @@ def run(
     dataset_name: ty.Literal["snum", "pmnist", "snumv", "svis", "splitcifar", "smodal"],
     dataset_path: Path,
 ):
+    """
+    This is an example of a train loop for which several tasks are scheduled in sequence.
+    """
     surprise_stream = TaskScheduler(
         dataset=dataset_name, dataset_root_path=dataset_path, batch_size=128
     )

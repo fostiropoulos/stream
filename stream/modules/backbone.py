@@ -8,9 +8,40 @@ from torch.nn.functional import relu
 from torchvision.models import resnet18
 
 
-
-
 class Backbone(nn.Module):
+    """
+    The backbone used for the Generalized Continual Learning setting.
+    The goal of Stream is to mitigate forgetting on the Backbone.
+    A user can inherit from this class to design their own model.
+
+    An overriding Backbone must over-ride classifier property and implement
+    `_forward` function.
+
+
+    Examples
+    --------
+    >>> from torchvision.models import resnet18
+    >>> import torch.nn as nn
+    >>> import torch
+    >>> class ResNetModel(Backbone):
+    ...     def __init__(self, output_dim):
+    ...            super().__init__()
+    ...            self.model = resnet18()
+    ...            # MODEL SUR-GERY
+    ...            self.model.conv1 = nn.Identity()
+    ...            self.model.fc = nn.Identity()
+    ...            self.classifier = nn.Linear(512, output_dim)
+    ...        def _forward(self, x):
+    ...            # shape [batch, 64, h, w]
+    ...            h = self.model(x)
+    ...            logits = self.classifier(h)
+    ...            return logits
+    >>> model = ResNetModel(output_dim=100)
+    >>> output = model(torch.randn(3, 64, 32, 32))
+    >>> output.shape
+    torch.Size([3, 100])
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -20,7 +51,6 @@ class Backbone(nn.Module):
         self.intermediate_grads = {}
 
     def _init_weights(self, m):
-
         if isinstance(m, nn.Linear):
             nn.init.xavier_normal_(m.weight)
             if m.bias is not None:
@@ -37,7 +67,16 @@ class Backbone(nn.Module):
         return logits
 
     @abstractmethod
-    def _forward(self, x):
+    def _forward(self, x: torch.Tensor):
+        """
+        The function that performs inference on some input Tensor and returns back some
+        logits to be used for classification.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            the input to perform inference on.
+        """
         return
 
     def clean_hooks(self):
@@ -50,7 +89,6 @@ class Backbone(nn.Module):
             self.intermediate_feats[name] = output.clone().detach()
 
         def interm_grads(module, input, output, name):
-
             self.intermediate_grads[name] = [
                 _input.clone().detach() for _input in input if _input is not None
             ]
@@ -66,20 +104,65 @@ class Backbone(nn.Module):
                     self.hooks.append(hook)
 
     def get_params(self) -> torch.Tensor:
+        """
+        Returns the parameters of the model as a single Tensor.
+        They can then be used with a GCL method to detect forgetting.
+
+        Returns
+        -------
+        torch.Tensor
+            A tensor of all parameters flattened.
+
+        Examples
+        --------
+        >>> model.get_params().shape
+        torch.Size([11218404])
+        """
         params = []
         for pp in list(self.parameters()):
             params.append(pp.view(-1))
         return torch.cat(params)
 
     def get_grads(self) -> torch.Tensor:
+        """
+        Returns the gradients of the model as a single Tensor.
+        They can then be used with a GCL method to detect forgetting.
+
+        Returns
+        -------
+        torch.Tensor
+            A tensor of all grads flattened.
+
+        Examples
+        --------
+        >>> model.get_grads().shape
+        torch.Size([11218404])
+        """
         return torch.cat(self.get_grads_list())
 
     def get_grads_list(self) -> list[torch.Tensor]:
+        """
+        Returns the gradients of the model as a list of Tensors.
+        Each element in the list corresponds to a different layer.
+        They can then be used with a GCL method to detect forgetting.
+
+        Returns
+        -------
+        list[torch.Tensor]
+            A list of tensors with the grads that correspond to
+            each layer.
+
+        Examples
+        --------
+        >>> out = model(torch.randn(3, 64, 32, 32))
+        >>> out.sum().backward()
+        >>> [x.shape for x in model.get_grads_list()[:3]]
+        [torch.Size([64]), torch.Size([64]), torch.Size([36864])]
+        """
         grads = []
         for pp in list(self.parameters()):
             grads.append(pp.grad.view(-1))
         return grads
-
 
 
 class ResNetModel(Backbone):
@@ -100,7 +183,6 @@ class ResNetModel(Backbone):
 
 class ResLinear(nn.Module):
     def __init__(self, in_planes: int, planes: int, expansion: int = 1) -> None:
-
         super().__init__()
         self.fc1 = nn.Linear(in_planes, planes)
         self.bn1 = nn.BatchNorm1d(planes)

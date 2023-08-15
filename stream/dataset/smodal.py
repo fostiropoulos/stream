@@ -13,15 +13,8 @@ from stream.dataset.transform.transforms import make_transform
 
 class SurpriseModal(SurpriseDataset):
     """
-    Using ImagenetR which is a rendition of Imagenet and Imagenet subsampled to
-    200 classes present in ImagenetR
-    https://arxiv.org/pdf/2204.04799.pdf
-    https://arxiv.org/pdf/2006.16241.pdf
-
-    Combining with Text Classification between Yelp and cross-domain shift
-    to amazon reviews.
-
-    Using ViT and GPT2 embeddings as a common representation between text and vision.
+    A multimodal Stream composed of DomainNetReal
+    DomainNetSketch, Imdb and Amazon
     """
 
     DATA_SHAPE = [
@@ -66,7 +59,7 @@ class SurpriseModal(SurpriseDataset):
         return make_transform(
             self.transform_name,
             "stream",
-            self.val,
+            self.seed,
             split=self.split,
             is_vector=True,
         )
@@ -111,6 +104,9 @@ def extract_feats(
 
 
 if __name__ == "__main__":
+    """
+    This file contains the logic for download and making the S-Modal dataset from scratch.
+    """
     args = argparse.ArgumentParser(description="Download and process SStream Dataset")
     args.add_argument(
         "--action",

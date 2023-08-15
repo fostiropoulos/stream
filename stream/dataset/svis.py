@@ -29,7 +29,7 @@ def is_valid_cimagenet_file(path):
 
 
 class CImagenet(ImageFolder):
-    """CImagenet is a Cifar10 classmap of Imagenet from CINIC-10 dataset"""
+    """CImagenet is a Cifar10 mapping of Imagenet from CINIC-10 dataset"""
 
     def __init__(self, root, split, download=False, **kwargs) -> None:
         self.data_dir = Path(root).joinpath("cinic-10")
@@ -47,6 +47,8 @@ class CImagenet(ImageFolder):
 
 
 class SurpriseVision(SurpriseDataset):
+    """A stream of CIFAR10 and Cinic-10 ImageNet."""
+
     DATA_SHAPE = [3, 32, 32]
     HEAD_SIZE = 10
     DS = [CIFAR10, CImagenet]
@@ -66,7 +68,7 @@ class SurpriseVision(SurpriseDataset):
         return make_transform(
             self.transform_name,
             self.ds_name,
-            self.val,
+            self.seed,
             split=self.split,
             is_vector=False,
         )
@@ -81,6 +83,7 @@ class SurpriseVision(SurpriseDataset):
 
 
 class SplitCIFAR100(SurpriseDataset):
+    """A CL Benchmark SplitCIFAR100 defined in terms of Stream."""
     DATA_SHAPE = [3, 32, 32]
     HEAD_SIZE = 10
     DS = [CIFAR100]
