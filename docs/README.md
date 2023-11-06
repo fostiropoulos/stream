@@ -14,7 +14,6 @@
 
 In  General Continual Learning (GCL), the goal is to learn a sequence of tasks that are presented once while maintaining performance on all previously learned tasks without the task identity during both the training and the evaluation phase. Stream provides a method to construct an infinite long sequence of tasks with varying degree of domain-gap (`learning-gap`) from a limited set of multi-modal dataset.
 
-The release of this Dataset and instructions are for the purposes of reviewing for [NeurIPS 2023 Datasets and Benchmarks Track](https://nips.cc/Conferences/2023/CallForDatasetsBenchmarks)
 
 For Detailed instructions please see our <a href="https://github.com/fostiropoulos/surprise-stream">[Code]</a>.
 
